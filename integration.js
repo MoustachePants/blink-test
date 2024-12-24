@@ -1,4 +1,3 @@
-const inquirer = require("inquirer").default;
 const axios = require("axios");
 const dotenv = require("dotenv");
 
@@ -44,6 +43,8 @@ const createJiraIssue = APICallerrorHandler(
     // log(response.data)...
     // No permissions with the free account :(
     // So it ends up here
+
+    // log("Issue created successfully.", "success");
   }
 );
 
@@ -60,6 +61,8 @@ const getJiraIssue = APICallerrorHandler(
       },
     });
 
+    log(`Successfully retrieved issue ${issueIdOrKey}.`);
+
     const issueData = issue.data.fields;
     log("Issue Summary: " + issueData.summary);
     log("Issue Parent: " + issueData.parent.key);
@@ -70,6 +73,10 @@ const getJiraIssue = APICallerrorHandler(
 
 // app
 const runIntegrationApp = async (jiraBaseURL) => {
+  log(
+    'Welcome to the JIRA integrational! You can exit whenever by pressing "Ctrl+C"'
+  );
+
   // Get user inputs
   const { jiraDomain, userEmail, jiraTokenKey, userSelection } =
     await getUserInputs(userInputQuestions.setupQuestions);
@@ -111,9 +118,6 @@ const runIntegrationApp = async (jiraBaseURL) => {
   if (userSelection === "Exit") {
     log("Goodbye!");
   }
-
-  // run app again when done
-  runIntegrationApp(jiraBaseURL, jiraAPIToken);
 };
 
 const jiraBaseURL = process.env.JIRA_BASE_URL;
